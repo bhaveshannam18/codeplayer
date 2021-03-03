@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CP by Bhavesh Annam</title>
+	<script type="text/javascript" src="jquery.min.js"></script>
+	<style type="text/css">
+		#header{
+			background-color: #EDEDED;
+			height: 40px;
+			padding: 0;
+			margin: 0;
+		}
+		body{
+			margin: 0;
+		}
+		#logo{
+			font-weight: bold;
+			padding: 3px 8px;
+			float: left;
+			/*font-size: 30px;*/
+			font-size: 28px;
+		}
+		.toggleButton{
+			float: left;
+			border:1px solid grey;
+			border-right: 0px;
+			font-size: 110%;
+			padding: 5px;
+		}
+		#buttonContainer{
+			margin: 0 auto;
+			width: 310px;
+			padding: 3px;
+		}
+		#output{
+			border:1px solid grey;
+			border-top-right-radius: 2px;
+			border-bottom-right-radius: 2px;
+		}
+		#html{
+			border-bottom-left-radius: 2px;
+			border-top-left-radius: 2px;
+		}
+		.active{
+			background-color: #E8F2FF;
+		}
+		.highlightedColor{
+			background-color: #E4E4E4;
+		}
+		#bodyContainer{
+			padding: 0;
+			margin: 0;
+
+		}
+		textarea{
+				resize: none;
+				border-color: grey;
+		}
+		.panel{
+			float: left;
+			width: 50%;
+			border-left: none;
+		}
+		iframe{
+			border-right: 1px solid grey;
+		}
+		.hidden{
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<div id="header">
+		<div id="logo">Code Player</div>
+		<div id="buttonContainer">
+			<div class="toggleButton active" id="html">HTML</div>
+			<div class="toggleButton" id="css">CSS</div>
+			<div class="toggleButton" id="javascript">JAVASCRIPT</div>
+			<div class="toggleButton active" id="output">OUTPUT</div>
+		</div>
+	</div>
+	<div id="bodyContainer">
+		<textarea id="htmlPanel" class="panel"><p id="paragraph">bhavesh annam</p></textarea>
+		<textarea id="cssPanel" class="panel hidden">p{color:blue;}</textarea>
+		<textarea id="javascriptPanel" class="panel hidden">document.getElementById("paragraph").innerHTML="bhavesh hello!";</textarea>
+		<iframe id="outputPanel" class="panel"></iframe>
+	</div>
+	<script type="text/javascript">
+
+
+		function updateOutput(){
+				$("iframe").contents().find("html").html("<html><head><style type='text/css'>" + $("#cssPanel").val() + "</style> </head> <body>" + $("#htmlPanel").val() + "</body> </html>");
+				document.getElementById("outputPanel").contentWindow.eval($("#javascriptPanel").val());
+			}
+			$(".toggleButton").hover(function(){
+				$(this).addClass("highlightedButton");
+			},function(){
+				$(this).removeClass("highlightedButton");
+			});
+			$(".toggleButton").click(function(){
+				$(this).toggleClass("active");
+				$(this).removeClass("highlightedButton");
+				var panelId = $(this).attr("id") + "Panel";
+				$("#" + panelId).toggleClass("hidden");
+				var numberOfActivePanels = 4 - $('.hidden').length;
+				$(".panel").width(($(window).width()/numberOfActivePanels)-15);
+			})
+			$(".panel").height($(window).height()-$("#header").height()-15);
+			$(".panel").width($(window).width()/2-15);
+			updateOutput();
+			$("textarea").on('change keyup paste',function(){
+				updateOutput();
+			});
+
+	</script>
+</body>
+</html>
